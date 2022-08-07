@@ -46,9 +46,10 @@
                 {% for question in course.question_set.all reversed %}
                     <div class="card mt-1">
                         <div class="card-header"><h5>Question {{forloop.counter}}: {{question.question_text}}</h5></div>
-                        <div class="card-body">1234
+                        <div class="card-body">
                             {% for choice in question.choice_set.all reversed %}
-                                <p>{{choice.choice_text}}</p>
+                                <input type="checkbox" id="box"+forloop.counter>
+                                <label> {{choice.choice_text}}</label><br>
                             {% endfor %}</div>
                     </div>
                 {% endfor %}
