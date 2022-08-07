@@ -43,10 +43,13 @@
     <div class="container-fluid">
             <h2>{{ course.name }}</h2>
             <div class="card-columns-vertical">
-                {% for lesson in course.lesson_set.all %}
+                {% for question in course.question_set.all reversed %}
                     <div class="card mt-1">
-                        <div class="card-header"><h5>Lesson {{lesson.order|add:1}}: {{lesson.title}}</h5></div>
-                        <div class="card-body">{{lesson.content}}</div>
+                        <div class="card-header"><h5>Question {{forloop.counter}}: {{question.question_text}}</h5></div>
+                        <div class="card-body">1234
+                            {% for choice in question.choice_set.all reversed %}
+                                <p>{{choice.choice_text}}</p>
+                            {% endfor %}</div>
                     </div>
                 {% endfor %}
             </div>
