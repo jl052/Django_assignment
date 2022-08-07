@@ -117,7 +117,7 @@ def submit(request, course_id):
         submission = Submission.objects.create(enrollment=enrollment)
         selected = request.POST['selected'] ###### no POST["selected"]
         submission = Submission.objects.create_user(username=username, first_name=first_name, last_name=last_name,
-                                           password=password)
+                                           password=password) ## I added this myself 我都唔知係邊copy返黎
         ## submission = Submission.objects.create(selected=selected)
         return 
         
