@@ -115,11 +115,12 @@ def submit(request, course_id):
         course = get_object_or_404(Course, pk=course_id)
         enrollment = Enrollment.objects.get(user=user, course=course)
         submission = Submission.objects.create(enrollment=enrollment)
-        selected = request.POST['selected'] ###### no POST["selected"]
-        submission = Submission.objects.create_user(username=username, first_name=first_name, last_name=last_name,
-                                           password=password) ## I added this myself 我都唔知係邊copy返黎
-        ## submission = Submission.objects.create(selected=selected)
-        return 
+        submitted_answers = extract_answers(request)
+        #selected = request.POST['selected'] ###### no POST["selected"]  你自己加架啦  原本deg submit係空既
+        #submission = Submission.objects.create_user(username=username, first_name=first_name, last_name=last_name,
+        #                                   password=password) ## I added this myself 我都唔知係邊copy返黎
+        ## submission = Submission.objects.create(submitted_answers)1234
+        return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
         
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
