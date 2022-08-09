@@ -120,7 +120,7 @@ def submit(request, course_id):
         #submission = Submission.objects.create_user(username=username, first_name=first_name, last_name=last_name,
         #                                   password=password) ## I added this myself 我都唔知係邊copy返黎
         ## submission = Submission.objects.create(submitted_answers)1234
-        return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
+        return redirect('onlinecourse:show_exam')
         
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
@@ -140,7 +140,9 @@ def extract_answers(request):
         # Get the selected choice ids from the submission record
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
-#def show_exam_result(request, course_id, submission_id):
+def show_exam_result(request, course_id, submission_id):
+
+    pass
 
 
 
