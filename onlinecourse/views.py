@@ -121,7 +121,7 @@ def submit(request, course_id):
         #                                   password=password) ## I added this myself 我都唔知係邊copy返黎
         ## submission = Submission.objects.create(submitted_answers)1234
         #return redirect('onlinecourse:show_exam_result', args=(course.id,))
-        return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id,)))
+        return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id,)))  ## 11 AUG added
         
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
@@ -141,14 +141,17 @@ def extract_answers(request):
         # Get the selected choice ids from the submission record
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
-def show_exam_result(request, course_id, submission_id):
+def show_exam_result(request, course_id):
+    #def show_exam_result(request, course_id, submission_id):
     
     course = get_object_or_404(Course, pk=course_id)
-    submission = get_object_or_404(Submission, pk=submission_id)
-    print(submission)
-    
-    
-    return HttpResponseRedirect(viewname='onlinecourse:show_exam_result', args=(course.id,))
+    #submission = get_object_or_404(Submission, pk=submission_id)
+    #print(submission)
+    context = {}
+    context["total_score"]=100
+    context["course_id"]=course_id
+    #return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id,)))
+    return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
 
 
