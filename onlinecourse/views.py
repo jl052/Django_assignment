@@ -151,7 +151,7 @@ def show_exam_result(request, course_id):
     #print(submission)
     context = {}
     context["total_score"]=100
-    context["course.id"]=course_id
+    context["course_id"]=course_id
     #return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id,)))
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
