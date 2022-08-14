@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import login, logout, authenticate
 import logging
+from . import models
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 # Create your views here.
@@ -113,13 +114,14 @@ def enroll(request, course_id):
 def submit(request, course_id):
         user = request.user
         course = get_object_or_404(Course, pk=course_id)
+        print("Course:",type(course))
         enrollment = Enrollment.objects.get(user=user, course=course)
         submission = Submission.objects.create(enrollment=enrollment)
         selected_choice = extract_answers(request)
-        submission.choices.add(selected_choice)
+        submission.choices.add(*selected_choice)
         submission.save()
-        print(submission.choices)
-        #print(type(submission))
+        #print(submission.choices)
+        print("Submission:",type(submission))
         #selected = request.POST['selected'] ###### no POST["selected"]  你自己加架啦  原本deg submit係空既
         #submission = Submission.objects.create_user(username=username, first_name=first_name, last_name=last_name,
         #                                   password=password) ## I added this myself 我都唔知係邊copy返黎
@@ -150,13 +152,32 @@ def show_exam_result(request, course_id, submission_id):
     #def show_exam_result(request, course_id, submission_id):  完全9黎
     #submitted_answers=extract_answers(request)
     print(submission_id)
-    course = get_object_or_404(Course,pk=course_id)
+    user = request.user
+    course = get_object_or_404(Course, pk=course_id)
+    #enrollment = Enrollment.objects.get(user=user, course=course)
     submission = get_object_or_404(Submission, pk=submission_id)
-    print(submission)
+    answer=submission.choices.all()  ## This line returns "<QuerySet [<Choice: Choice object (1)>, <Choice: Choice object (2)>]>"
+    full_score,score=0,0
+    for q in course.question_set.all():
+        if q.is_get_score(answer):
+            score+=q.grade
+        full_score+=q.grade
+    grade=score/full_score*100
+    
+
+    
+    #a = Submission.objects.filter(submission_id=submission_id)
+    #b = submission.filter(submission_id=submission_id)
+    #answer=submission.choice_set.all()
+
+    #a = submission.choices.get(submission=submission_id)
+    print(answer[:])
+    
+    
     context = {}
-    context["total_score"]=100
-    context["course.id"]=course_id
-    context["course_id"]=course_id
+    context['total_score']=grade
+    context['course']=course
+    context['submission']=submission
     #return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id,)))
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
