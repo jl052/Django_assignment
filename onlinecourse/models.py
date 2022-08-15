@@ -114,10 +114,13 @@ class Question(models.Model):
     def is_get_score(self, selected_ids):
         all_answers = self.choice_set.filter(is_correct=True).count()
         selected_correct = self.choice_set.filter(is_correct=True, id__in=selected_ids).count()
-        print(self.choice_set.filter(is_correct=True))
-        print(self.choice_set.filter(is_correct=True, id__in=selected_ids))
-        print("all ans:",all_answers)
-        print("selected correct", selected_correct)
+        #print("Model_answer",self.choice_set.filter(is_correct=True))
+        #print("Selected right",self.choice_set.filter(is_correct=True, id__in=selected_ids))
+        #print("all ans count:",all_answers)
+        #print("selected correct count", selected_correct)
+        #print("Your choice",selected_ids[:])
+        my_choice=self.choice_set.filter(id__in=selected_ids)
+        #print("Test:",self.choice_set.filter(id__in=selected_ids))
         
         if all_answers == selected_correct:
             return True

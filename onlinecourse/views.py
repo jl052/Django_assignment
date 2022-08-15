@@ -156,12 +156,14 @@ def show_exam_result(request, course_id, submission_id):
     answer=submission.choices.all()  ## This line returns "<QuerySet [<Choice: Choice object (1)>, <Choice: Choice object (2)>]>"
     full_score,score=0,0
     for q in course.question_set.all():
+        print("outside Model Ans",q.choice_set.filter(is_correct=True))
+        print("outside Your Choice",q.choice_set.filter(id__in=answer))
         if q.is_get_score(answer):
             score+=q.grade
         full_score+=q.grade
     grade=score/full_score*100
-    print(answer[:])
-    
+    #print(answer[:])
+    #course.question.choice_set.filter(is_correct=True)
     
     context = {}
     context['total_score']=int(grade)
