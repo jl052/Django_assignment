@@ -158,9 +158,11 @@ def show_exam_result(request, course_id, submission_id):
     for q in course.question_set.all():
         print("outside Model Ans",q.choice_set.filter(is_correct=True))
         print("outside Your Choice",q.choice_set.filter(id__in=answer))
+        print("grade",q.grade)
         if q.is_get_score(answer):
             score+=q.grade
         full_score+=q.grade
+        print(score,"/",full_score)
     grade=score/full_score*100
     #print(answer[:])
     #course.question.choice_set.filter(is_correct=True)

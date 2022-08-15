@@ -48,25 +48,29 @@
         <a class="btn btn-link text-danger" >Re-test</a>  <!-- href missing for now-->
         {% endif %}
         <h5 class="">Exam results</h5>
-        {% for question in course.question_set.all reversed %}
+        {% for question in course.question_set.all reversed%}
             <div class="card mt-1">
                 <div class="card-header"><h5>{{ question.question_text}}</h5>
                 </div>
                 {% csrf_token %}
                 <div class="form-group">
-                    {% for choice in question.choice_set.all reversed %}
+                    {% for choice in question.choice_set.all%}
                         <div class="form-check">
                             <label class="form-check-label">
                                 {%if choice.is_correct %}
-                                    <p style="color:green"> {{ choice.choice_text }}{{submission.choice_set.id}}</p>
-                                    {%for x in question.choice_set.id.all%}
-                                        x
-                                    {%endfor%}
+                                    <p style="color:green"> Correct answer: {{ choice.choice_text }}{{submission.choice_set.id}}</p>
                                 {% else %}
                                     {{ choice.choice_text }} {{submission.choice_set.id}}
                                 {% endif %}
                             </label>
                         </div>
+                    {% endfor %}
+                    
+                    {% for choices in submission.choices.all %}
+                            {% if choices.question == question%}
+                                {{choices.choice_text}}
+                                <br>
+                            {% endif %}
                     {% endfor %}
                 </div>
             </div>
