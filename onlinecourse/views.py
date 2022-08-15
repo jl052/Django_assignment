@@ -149,12 +149,9 @@ def extract_answers(request):
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
 def show_exam_result(request, course_id, submission_id):
-    #def show_exam_result(request, course_id, submission_id):  完全9黎
-    #submitted_answers=extract_answers(request)
-    print(submission_id)
+    #print(submission_id)
     user = request.user
     course = get_object_or_404(Course, pk=course_id)
-    #enrollment = Enrollment.objects.get(user=user, course=course)
     submission = get_object_or_404(Submission, pk=submission_id)
     answer=submission.choices.all()  ## This line returns "<QuerySet [<Choice: Choice object (1)>, <Choice: Choice object (2)>]>"
     full_score,score=0,0
@@ -163,22 +160,19 @@ def show_exam_result(request, course_id, submission_id):
             score+=q.grade
         full_score+=q.grade
     grade=score/full_score*100
-    
-
-    
-    #a = Submission.objects.filter(submission_id=submission_id)
-    #b = submission.filter(submission_id=submission_id)
-    #answer=submission.choice_set.all()
-
-    #a = submission.choices.get(submission=submission_id)
     print(answer[:])
     
     
     context = {}
-    context['total_score']=grade
+    context['total_score']=int(grade)
     context['course']=course
     context['submission']=submission
-    #return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id,)))
+    # In redirect, you can only pass through args that exists in the url.
+    #'<int:course_id>/submit/' --> only pass through one argument which is course_id
+    #'course/<int:course_id>/submission/<int:submission_id>/result/' pass through two args, course_id and submission_id
+    # in render, the pass through argument is a Dictionary (e.g. context)
+    # It is a dictionary, you can pass through anything, from int, string to array,list, even object.
+    # In this case, passed through object is query_set from CRUD action.
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
 

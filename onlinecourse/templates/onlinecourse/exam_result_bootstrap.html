@@ -38,19 +38,32 @@
 <div class="container-fluid">
     {% if total_score > 80 %}
     <div class="alert alert-success">
-       <!--HINT Display passed info -->
+        <b>Congratulations, {{user.first_name}}!</b> You have passed the exam and completed the course with score {{total_score}}/100
     </div>
         {% else %}
         <div class="alert alert-danger">
-            123{{total_score}}<!--HINT Display failed info -->
+            <b>Failed</b> Sorry, {{user.first_name}}! You have failed exam with score {{total_score}}/100<!--HINT Display failed info -->
         </div>
                 
-        <a class="btn btn-link text-danger" >Re-test</a>
+        <a class="btn btn-link text-danger" >Re-test</a>  <!-- href missing for now-->
         {% endif %}
-        <div class="card-columns-vertical mt-1">
-        <h5 class="">Exam results</h5>
-            <!--HINT Display exam results-->
-        </div>
-    </div>
+            <h5 class="">Exam results</h5>
+            {% for question in course.question_set.all reversed %}
+                <div class="card mt-1">
+                    <div class="card-header"><h5>{{ question.question_text}}</h5>
+                    </div>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {% for choice in question.choice_set.all reversed %}
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <p style="color:green"> {{ choice.choice_text }} </p>
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+        {% endfor %}
+</div>
 </body>
 </html>
