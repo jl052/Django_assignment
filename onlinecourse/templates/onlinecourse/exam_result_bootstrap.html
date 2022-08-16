@@ -45,7 +45,7 @@
             <b>Failed</b> Sorry, {{user.first_name}}! You have failed exam with score {{total_score}}/100<!--HINT Display failed info -->
         </div>
                 
-        <a class="btn btn-link text-danger" >Re-test</a>  <!-- href missing for now-->
+        <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>  <!-- href missing for now-->
         {% endif %}
         <h5 class="">Exam results</h5>
         {% for question in course.question_set.all reversed%}
@@ -65,7 +65,7 @@
                             </label>
                         </div>
                     {% endfor %}
-                    
+
                     {% for choices in submission.choices.all %}
                             {% if choices.question == question%}
                                 {{choices.choice_text}}
