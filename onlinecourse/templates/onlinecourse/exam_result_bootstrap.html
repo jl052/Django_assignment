@@ -58,11 +58,14 @@
                         <div class="form-check">
                             <label class="form-check-label">
                                 {%if choice.is_correct %}
-                                    <p style="color:green"> Correct answer: {{ choice.choice_text }}{{submission.choice_set.id}}</p>
+                                    <p style="color:{{colourful}}"> Correct answer: {{ choice.choice_text }}{{submission.choice_set.id}}</p>
                                 {% else %}
                                     {{ choice.choice_text }} {{submission.choice_set.id}}
                                 {% endif %}
-                            </label>
+                            </label><br>
+                            {% for item1, item2 in liste %}
+                                {{item1}}:{{item2}}
+                            {%endfor%}
                         </div>
                     {% endfor %}
 

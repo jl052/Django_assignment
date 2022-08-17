@@ -158,7 +158,6 @@ def show_exam_result(request, course_id, submission_id):
     for q in course.question_set.all():
         print("outside Model Ans",q.choice_set.filter(is_correct=True))
         print("outside Your Choice",q.choice_set.filter(id__in=answer))
-        print("grade",q.grade)
         if q.is_get_score(answer):
             score+=q.grade
         full_score+=q.grade
@@ -176,10 +175,14 @@ def show_exam_result(request, course_id, submission_id):
     #use zup function and double for loop in html template to mark the text colour
     #example as follow for zip function
     #https://www.w3schools.com/python/ref_func_zip.asp
-    #a = (1, 2,3)
-    #b = (1, 2,"")
-    #c = (3,2,1)
-    #x = zip(a, b) or even zip 3 or more
+    a = ["Q1", "Q2","Q3"]
+    b = ["C1","C2","C3"]
+    c = [1,2,3]
+    x = list(zip(b, c)) #or even zip 3 or more
+    y = zip(a,x)
+    context['liste']=x
+    context['colourful']="green"
+    print(list(y))
     #use the tuple() or list() function to display a readable version of the result:
     #print(list(x))
     #use function to determine colour and match question text to it.
