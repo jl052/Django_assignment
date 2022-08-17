@@ -171,6 +171,33 @@ def show_exam_result(request, course_id, submission_id):
     context['total_score']=int(grade)
     context['course']=course
     context['submission']=submission
+
+
+    #use zup function and double for loop in html template to mark the text colour
+    #example as follow for zip function
+    #https://www.w3schools.com/python/ref_func_zip.asp
+    #a = (1, 2,3)
+    #b = (1, 2,"")
+    #c = (3,2,1)
+    #x = zip(a, b) or even zip 3 or more
+    #use the tuple() or list() function to display a readable version of the result:
+    #print(list(x))
+    #use function to determine colour and match question text to it.
+    #this list should contain For example:
+    #1:["green","green","black"]
+    #2:[course.question_set.choice_text[0],course.question_set.choice_text[1],course.question_set.choice_text[2]]
+    #Merge into [("green",choice_text0),("green",choice_text1),("black",choice_text2)]
+
+
+    #double for loop function
+    #https://github.com/gabrielgrant/django-multiforloop
+    #https://stackoverflow.com/questions/14079815/using-for-in-template-with-two-variables-django
+    #return render_to_response('template.html', {'liste': mylist, ...   below
+    #{% for item1, item2 in liste %}   in the tempalte
+
+
+
+
     # In redirect, you can only pass through args that exists in the url.
     #'<int:course_id>/submit/' --> only pass through one argument which is course_id
     #'course/<int:course_id>/submission/<int:submission_id>/result/' pass through two args, course_id and submission_id
