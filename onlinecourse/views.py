@@ -115,14 +115,14 @@ def enroll(request, course_id):
 def submit(request, course_id):
         user = request.user
         course = get_object_or_404(Course, pk=course_id)
-        print("Course:",type(course))
+        #print("Course:",type(course))
         enrollment = Enrollment.objects.get(user=user, course=course)
         submission = Submission.objects.create(enrollment=enrollment)
         selected_choice = extract_answers(request)
         submission.choices.add(*selected_choice)
         submission.save()
         #print(submission.choices)
-        print("Submission:",type(submission))
+        #print("Submission:",type(submission))
         #selected = request.POST['selected'] ###### no POST["selected"]  你自己加架啦  原本deg submit係空既
         #submission = Submission.objects.create_user(username=username, first_name=first_name, last_name=last_name,
         #                                   password=password) ## I added this myself 我都唔知係邊copy返黎
@@ -139,7 +139,7 @@ def extract_answers(request):
             value = request.POST[key]
             choice_id = int(value)
             submitted_anwsers.append(choice_id)
-    print(submitted_anwsers)
+    #print(submitted_anwsers)
     return submitted_anwsers
 
 
@@ -157,12 +157,12 @@ def show_exam_result(request, course_id, submission_id):
     answer=submission.choices.all()  ## This line returns "<QuerySet [<Choice: Choice object (1)>, <Choice: Choice object (2)>]>"
     full_score,score=0,0
     for q in course.question_set.all():
-        print("outside Model Ans",q.choice_set.filter(is_correct=True))
-        print("outside Your Choice",q.choice_set.filter(id__in=answer))
+        #print("outside Model Ans",q.choice_set.filter(is_correct=True))
+        #print("outside Your Choice",q.choice_set.filter(id__in=answer))
         if q.is_get_score(answer):
             score+=q.grade
         full_score+=q.grade
-        print(score,"/",full_score)
+        #print(score,"/",full_score)
     grade=score/full_score*100
     #print(answer[:])
     #course.question.choice_set.filter(is_correct=True)
@@ -177,25 +177,32 @@ def show_exam_result(request, course_id, submission_id):
     #example as follow for zip function
     #https://www.w3schools.com/python/ref_func_zip.asp
     item1 = []
+    item2=[]
     length=0
     n=1
     for i in course.question_set.all():
-        text="Q"+str(n)
-        item1.append(text)
+        #text="Q"+str(n)
+        item1.append(i.question_text)
         n+=1
         length=max(length,(len(i.choice_set.all())))
         n2=1
         b=[""]*length
         c=[""]*length
         for j in i.choice_set.all():
-            text2="C"+str(n2)+"_"+str(n-1)
-            b[n2-1]=text2
-            c[n2-1]=random.randint(1, 9)
+            #text2="C"+str(n2)+"_"+str(n-1)##Choice_text here
+            b[n2-1]=j.choice_text
+            c[n2-1]=random.randint(1, 9)##Colour Text here
             n2+=1
-        print(b,c)
-    item2=[]
-    print(item1)
-
+        d=list(zip(b,c))
+        item2.append(d)
+    #print(item1)
+    #print(item2)
+    item_master=zip(item1,item2)
+    #print(len(list(item_master)))
+    for i1 in list(item_master):
+        print("Question In",i1[0],"Q OUT")
+        for i2 in i1[1]:
+            print("Choice inside",i2)
     b = ["C1","C2","C3"]
     c = [1,2,3]
     x = list(zip(b, c)) #or even zip 3 or more
