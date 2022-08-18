@@ -9,6 +9,7 @@ from django.views import generic
 from django.contrib.auth import login, logout, authenticate
 import logging
 from . import models
+import random
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 # Create your views here.
@@ -175,14 +176,33 @@ def show_exam_result(request, course_id, submission_id):
     #use zup function and double for loop in html template to mark the text colour
     #example as follow for zip function
     #https://www.w3schools.com/python/ref_func_zip.asp
-    a = ["Q1", "Q2","Q3"]
+    item1 = []
+    length=0
+    n=1
+    for i in course.question_set.all():
+        text="Q"+str(n)
+        item1.append(text)
+        n+=1
+        length=max(length,(len(i.choice_set.all())))
+        n2=1
+        b=[""]*length
+        c=[""]*length
+        for j in i.choice_set.all():
+            text2="C"+str(n2)+"_"+str(n-1)
+            b[n2-1]=text2
+            c[n2-1]=random.randint(1, 9)
+            n2+=1
+        print(b,c)
+    item2=[]
+    print(item1)
+
     b = ["C1","C2","C3"]
     c = [1,2,3]
     x = list(zip(b, c)) #or even zip 3 or more
-    y = zip(a,x)
+    y = zip(item1,x)
     context['liste']=x
     context['colourful']="green"
-    print(list(y))
+    #print(list(y))
     #use the tuple() or list() function to display a readable version of the result:
     #print(list(x))
     #use function to determine colour and match question text to it.
