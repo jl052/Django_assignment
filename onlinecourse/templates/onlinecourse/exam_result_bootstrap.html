@@ -58,9 +58,11 @@
                 <div class="form-group">
                     {% for in1,in2 in item2 %}
                         <div class="form-check">
+                            {% if in1%}
                             <label class="form-check-label">
-                                    <p style="color:{{colourful}}">{{in1}} : {{in2}}</p>
+                                    <p style="color:{{in2}}">{{in1}}</p>
                             </label><br>
+                            {%endif%}
                         </div>
                     {% endfor %}
                 </div>

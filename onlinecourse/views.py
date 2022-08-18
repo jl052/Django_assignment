@@ -150,22 +150,19 @@ def extract_answers(request):
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
 def show_exam_result(request, course_id, submission_id):
-    #print(submission_id)
     user = request.user
     course = get_object_or_404(Course, pk=course_id)
     submission = get_object_or_404(Submission, pk=submission_id)
     answer=submission.choices.all()  ## This line returns "<QuerySet [<Choice: Choice object (1)>, <Choice: Choice object (2)>]>"
     full_score,score=0,0
     for q in course.question_set.all():
-        #print("outside Model Ans",q.choice_set.filter(is_correct=True))
-        #print("outside Your Choice",q.choice_set.filter(id__in=answer))
+        #print("Model Ans",q.choice_set.filter(is_correct=True))
+        #print("Your Choice",q.choice_set.filter(id__in=answer))
         if q.is_get_score(answer):
             score+=q.grade
         full_score+=q.grade
-        #print(score,"/",full_score)
     grade=score/full_score*100
-    #print(answer[:])
-    #course.question.choice_set.filter(is_correct=True)
+
     
     context = {}
     context['total_score']=int(grade)
@@ -181,7 +178,6 @@ def show_exam_result(request, course_id, submission_id):
     length=0
     n=1
     for i in course.question_set.all():
-        #text="Q"+str(n)
         item1.append(i.question_text)
         n+=1
         length=max(length,(len(i.choice_set.all())))
@@ -189,34 +185,21 @@ def show_exam_result(request, course_id, submission_id):
         b=[""]*length
         c=[""]*length
         for j in i.choice_set.all():
-            #text2="C"+str(n2)+"_"+str(n-1)##Choice_text here
             b[n2-1]=j.choice_text
-            c[n2-1]=random.randint(1, 9)##Colour Text here
+            if j.is_correct and j in i.choice_set.filter(id__in=answer):
+                b[n2-1]="Correct answer: "+j.choice_text
+                c[n2-1]="green"
+            elif j.is_correct and j not in i.choice_set.filter(id__in=answer):
+                b[n2-1]="Not selected: "+j.choice_text
+                c[n2-1]="orange"
+            else:
+                c[n2-1]="black"
             n2+=1
         d=list(zip(b,c))
         item2.append(d)
-    #print(item1)
-    #print(item2)
     item_master=list(zip(item1,item2))
-    #print(len(list(item_master)))
-    for i1 in list(item_master):
-        pass
-        #print(i1[0])
-        for i2 in i1[1]:
-        #    print("Choice inside",i2)
-            pass
-    b = ["C1","C2","C3"]
-    c = [1,2,3]
-    x = list(zip(b, c)) #or even zip 3 or more
-    y = zip(item1,x)
-    print(x)
-    print("\n",item_master[0])
-    context['liste']=x
     context['item_master']=item_master
-    context['colourful']="green"
-    #print(list(y))
     #use the tuple() or list() function to display a readable version of the result:
-    #print(list(x))
     #use function to determine colour and match question text to it.
     #this list should contain For example:
     #1:["green","green","black"]
