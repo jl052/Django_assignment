@@ -197,17 +197,22 @@ def show_exam_result(request, course_id, submission_id):
         item2.append(d)
     #print(item1)
     #print(item2)
-    item_master=zip(item1,item2)
+    item_master=list(zip(item1,item2))
     #print(len(list(item_master)))
     for i1 in list(item_master):
-        print("Question In",i1[0],"Q OUT")
+        pass
+        #print(i1[0])
         for i2 in i1[1]:
-            print("Choice inside",i2)
+        #    print("Choice inside",i2)
+            pass
     b = ["C1","C2","C3"]
     c = [1,2,3]
     x = list(zip(b, c)) #or even zip 3 or more
     y = zip(item1,x)
+    print(x)
+    print("\n",item_master[0])
     context['liste']=x
+    context['item_master']=item_master
     context['colourful']="green"
     #print(list(y))
     #use the tuple() or list() function to display a readable version of the result:

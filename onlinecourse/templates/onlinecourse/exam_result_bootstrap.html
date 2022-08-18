@@ -48,32 +48,20 @@
         <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>  <!-- href missing for now-->
         {% endif %}
         <h5 class="">Exam results</h5>
-        {% for question in course.question_set.all reversed%}
+        <!--{% for question in course.question_set.all reversed%}
+        {%endfor%}-->
+        {% for item1, item2 in item_master reversed%}
             <div class="card mt-1">
-                <div class="card-header"><h5>{{ question.question_text}}</h5>
+                <div class="card-header"><h5>{{item1}}</h5>
                 </div>
                 {% csrf_token %}
                 <div class="form-group">
-                    {% for choice in question.choice_set.all%}
+                    {% for in1,in2 in item2 %}
                         <div class="form-check">
                             <label class="form-check-label">
-                                {%if choice.is_correct %}
-                                    <p style="color:{{colourful}}"> Correct answer: {{ choice.choice_text }}{{submission.choice_set.id}}</p>
-                                {% else %}
-                                    {{ choice.choice_text }} {{submission.choice_set.id}}
-                                {% endif %}
+                                    <p style="color:{{colourful}}">{{in1}} : {{in2}}</p>
                             </label><br>
-                            {% for item1, item2 in liste %}
-                                {{item1}}:{{item2}}
-                            {%endfor%}
                         </div>
-                    {% endfor %}
-
-                    {% for choices in submission.choices.all %}
-                            {% if choices.question == question%}
-                                {{choices.choice_text}}
-                                <br>
-                            {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -81,3 +69,4 @@
 </div>
 </body>
 </html>
+
