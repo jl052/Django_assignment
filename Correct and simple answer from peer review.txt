@@ -1,0 +1,74 @@
+The simple answer for show_result HTML template can actually be done in the template itself.
+Part of his exam_result_bootstrap.html
+{% for question in course.question_set.all %}
+                    <div class="card mt-1">
+                        <div class="card-header"><h5>{{question.content}}</h5></div>
+                        <div class="card-body">
+                            {% for choice in question.choice_set.all %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        {% if choice.is_correct and choice.id in selected_ids %}
+                                            <p style="color: green;">Correct answer:  {{ choice.content }}</p>
+                                        {% elif choice.id in selected_ids %}
+                                            <p style="color: orange;">Not selected: {{ choice.content }}</p>
+                                        {% else %}
+                                            <p>{{ choice.choice_text }}</p>
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+His view.py
+
+
+def submit(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    user = request.user
+    enrollment = Enrollment.objects.get(user=user, course=course)
+    submission = Submission.objects.create(enrollment=enrollment)
+    for key in request.POST:
+        if key.startswith('choice'):
+            value = request.POST[key]
+            choice_id = int(value)
+            choice_obj = get_object_or_404(Choice, pk=choice_id)
+            submission.choices.add(choice_obj)
+    return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id, submission.id)))
+
+# <HINT> A example method to collect the selected choices from the exam form from the request object
+#def extract_answers(request):
+#    submitted_anwsers = []
+#    for key in request.POST:
+#        if key.startswith('choice'):
+#            value = request.POST[key]
+#            choice_id = int(value)
+#            submitted_anwsers.append(choice_id)
+#    return submitted_anwsers
+
+
+# <HINT> Create an exam result view to check if learner passed exam and show their question results and result for each question,
+# you may implement it based on the following logic:
+        # Get course and submission based on their ids
+        # Get the selected choice ids from the submission record
+        # For each selected choice, check if it is a correct answer or not
+        # Calculate the total score
+def show_exam_result(request, course_id, submission_id):
+    course = get_object_or_404(Course, pk=course_id)
+    submission = get_object_or_404(Submission, pk=submission_id)
+    selected_choices = submission.choices.all()
+    points = 0;
+    total = len(selected_choices)
+    for choice in selected_choices:
+        if choice.is_correct == True:
+            points = points + 1;
+    grade = points//total;
+    final_return = {'course':course, 'selected_ids':selected_choices, 'grade':grade}
+    
+    return render(request, 'onlinecourse/exam_result_bootstrap.html', final_return)
+
+
+
+
+Hope I can learn something.
